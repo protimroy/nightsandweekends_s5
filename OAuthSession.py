@@ -167,8 +167,9 @@ class OAuthObject( OAuthObjectBase ):
         if authenticate:
             self.TOKEN_ENDPOINT_AUTH_METHOD = "password_json"  # noqa
 
-            self._username = username
-            self._password = password
+            self._username = str(username)
+            self._password = str(password)
+
             self._auth_url = url
 
             self.session = OAuth2Session(
@@ -286,3 +287,4 @@ if __name__ == "__main__":
 
     user = OAuthObject().authenticate( whoop_auth_url, whoop_username, whoop_password, authenticate = True );
     print( "User Authenticated:", user.is_authenticated() );
+    print( user.session.token );
