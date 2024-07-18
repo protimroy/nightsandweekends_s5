@@ -24,8 +24,10 @@ import config;
 class WhoopAPI():
     def __init__(self) -> None:
         super().__init__();
-        self.schema = self._get_schema();
+        self.conf = config.get_config( "config.ini" );
+        self.url_dict = dict( self.conf.items( "urls" ) );
 
+        self.schema = self._get_schema();
 
     def _get_schema( self ):
         """
@@ -44,6 +46,7 @@ class WhoopAPI():
         Raises:
             requests.exceptions.HTTPError: If the request fails.
         """
+
         url = self.url_dict['whoop_openapi_url'];
         
         response = requests.get( url );
