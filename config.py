@@ -4,6 +4,7 @@ It was made for the nightsandweekends_s5 project.
 Protim R 2024
 """
 import configparser;
+from sqlalchemy import create_engine
 
 def _init_config():
     """
@@ -45,3 +46,11 @@ def get_config( name : str ) -> dict:
     if name not in _init_config():
         raise ValueError( f"Configuration setting '{name}' not found." );
     return _config;
+
+
+def get_engine():
+    """
+    Create and return the sql engine
+    """
+    # create a mysql engine
+    return create_engine( _config["database"]["connection_string"] );

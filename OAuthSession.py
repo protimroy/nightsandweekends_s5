@@ -267,24 +267,25 @@ class OAuthObject( OAuthObjectBase ):
         """
         self.session.close()
 
-if __name__ == "__main__":
-    conf = config.get_config("config.ini");
+
+#if __name__ == "__main__":
+    #conf = config.get_config("config.ini");
 
     # parse the configparser object
-    auth_dict = dict( conf.items( "authentication" ) );
-    url_dict = dict( conf.items( "urls" ) );
+    #auth_dict = dict( conf.items( "authentication" ) );
+    #url_dict = dict( conf.items( "urls" ) );
     
     # get the whoop authentication information
     # whoop is a subword in the key
-    whoop_auth = { key: value for key, value in auth_dict.items() if "whoop" in key.lower() };
-    whoop_url = { key: value for key, value in url_dict.items() if "whoop" in key.lower() };
+    #whoop_auth = { key: value for key, value in auth_dict.items() if "whoop" in key.lower() };
+    #whoop_url = { key: value for key, value in url_dict.items() if "whoop" in key.lower() };
 
-    whoop_username = whoop_auth["whoop_username"];
-    whoop_password = whoop_auth["whoop_password"];
+    #whoop_username = whoop_auth["whoop_username"];
+    #whoop_password = whoop_auth["whoop_password"];
 
-    whoop_request_url = whoop_url["whoop_request_url"];
-    whoop_auth_url = whoop_url["whoop_auth_url"];
+    #whoop_request_url = whoop_url["whoop_request_url"];
+    #whoop_auth_url = whoop_url["whoop_auth_url"];
 
-    user = OAuthObject().authenticate( whoop_auth_url, whoop_username, whoop_password, authenticate = True );
-    print( "User Authenticated:", user.is_authenticated() );
-    print( user.session.token );
+    #user = OAuthObject().authenticate( whoop_auth_url, whoop_username, whoop_password, authenticate = True );
+    #print( "User Authenticated:", user.is_authenticated() );
+    #print( user.session.token );

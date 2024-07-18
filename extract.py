@@ -1,6 +1,5 @@
 import json
 import config
-from typing import Any
 import requests
 from OAuthSession import OAuthObject
 
@@ -41,24 +40,58 @@ class Extract():
         self.access_token = oauth_token['access_token']
         return self.access_token
 
-    def _make_request(self, method: str, url_slug: str, **kwargs: Any) -> dict[str, Any]:
+    def _make_request( self, method: str, url_slug: str, **kwargs ) -> dict[str]:
         # Get the OAuth token
-        access_token = self.get_access_token()
+        access_token = self._get_access_token()
 
         # Include the OAuth token in the request headers
         headers = kwargs.get('headers', {})
         headers['Authorization'] = f'Bearer {access_token}'
 
         # Make the request with the OAuth token in the headers
-        response = requests.request(method=method, url=self.whoop_request_url + "/" + url_slug, headers=headers, **kwargs)
+        response = requests.request( method=method, url=self.whoop_request_url + url_slug, headers=headers, **kwargs )
         response.raise_for_status()
         return response.json()
+    
+    def _make_paginated_request( self, method: str, url_slug: str, **kwargs ) -> list[dict]:
+        # Get the OAuth token
+        access_token = self._get_access_token()
+
+        # Include the OAuth token in the request headers
+        headers = kwargs.get('headers', {})
+        headers['Authorization'] = f'Bearer {access_token}'
+
+        params = kwargs.pop( 'params', {} )
+        response_data = list();
+
+        # Make the request with the OAuth token in the headers
+
+        while True:
+            response = requests.request( method=method, url=self.whoop_request_url + url_slug, headers=headers, params=params )
+            response.raise_for_status()
+            response_data += response["records"]
+
+            if next_token := response["next_token"]:
+                params["nextToken"] = next_token
+
+            else:
+                break
+
+        return response_data
+    
+    def main( self, api: str ):
+        if self.wearable == "whoop":
+            self.whoop = WhoopAPI();
+            response = self._make_request( method="GET", url_slug= self.whoop( api ) );
+            return response
 
 
-if __name__ == "__main__":
-    obj = Extract("whoop");
-    whoop = WhoopAPI();
-    whoop.get_profile();
-    response = obj._make_request(method="GET", url_slug="v1/user/profile/basic")
-    print( response )
+#if __name__ == "__main__":
+    #obj = Extract("whoop");
+    #whoop = WhoopAPI();
+    
+    #response = obj._make_request( method="GET", url_slug= whoop('openapi_schema') );
+    #print( response );
 
+    #response = obj._make_request( method="GET", url_slug= whoop('profile') );
+    #print( response );
