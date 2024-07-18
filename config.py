@@ -51,6 +51,21 @@ def get_config( name : str ) -> dict:
 def get_engine():
     """
     Create and return the sql engine
+
+    Args:
+        None
+
+    Returns:
+        engine (sqlalchemy.engine.base.Connection): The sql engine.
+
+    Attributes:
+        None
+
+    Raises:
+        ValueError: Error creating the engine.
     """
     # create a mysql engine
-    return create_engine( _config["database"]["connection_string"] );
+    try:
+        return create_engine( _config["database"]["connection_string"] );
+    except:
+        raise ValueError( "Error creating the engine." );

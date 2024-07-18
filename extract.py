@@ -1,16 +1,54 @@
-import json
 import config
 import requests
 from OAuthSession import OAuthObject
 
 
-import whoop_api
 from whoop_api import WhoopAPI
 
 class Extract():
     """
+    Extract data from a wearable device.
+
+    Args:
+        None
+
+    Returns:
+        None
+
+    Attributes:
+        wearable (str): The wearable to extract data from.
+        conf (configparser.ConfigParser): The configuration settings.
+        whoop_request_url (str): The Whoop request URL.
+        whoop_auth_url (str): The Whoop authentication URL.
+        user (OAuthObject): The OAuth user.
+
+        _get_access_token (function): Get the OAuth access token.
+        _make_request (function): Make a request to the API.
+        _make_paginated_request (function): Make a paginated request to the API.
+
+    Raises:
+        None        
     """
     def __init__( self, wearable: str ):
+        """
+        Constructor for the Extract class.
+
+        Args:
+            wearable (str): The wearable to extract data from.
+
+        Returns:
+            None
+
+        Attributes:
+            wearable (str): The wearable to extract data from.
+            conf (configparser.ConfigParser): The configuration settings.
+            whoop_request_url (str): The Whoop request URL.
+            whoop_auth_url (str): The Whoop authentication URL.
+            user (OAuthObject): The OAuth user.
+
+        Raises:
+            None
+        """
         self.wearable = wearable;
         if self.wearable == "whoop":
             self.conf = config.get_config("config.ini");
@@ -35,12 +73,43 @@ class Extract():
 
     def _get_access_token( self ):
         """
+        Get the OAuth access token.
+
+        Args:
+            None
+
+        Returns:
+            str: The OAuth access token.
+
+        Attributes:
+            oauth_token (dict): The OAuth token.
+
+        Raises:
+            None
         """
         oauth_token = self.user.session.token
         self.access_token = oauth_token['access_token']
         return self.access_token
 
     def _make_request( self, method: str, url_slug: str, **kwargs ) -> dict[str]:
+        """
+        Make a request to the API.
+
+        Args:
+            method (str): The HTTP method to use for the request.
+            url_slug (str): The URL slug for the request.
+            **kwargs: Additional keyword arguments to pass to the request.
+
+        Returns:
+            dict[str]: The response data from the API.
+
+        Attributes:
+            access_token (str): The OAuth access token.
+            headers (dict): The request headers.
+
+        Raises:
+            requests.exceptions.HTTPError: If the request fails.
+        """
         # Get the OAuth token
         access_token = self._get_access_token()
 
@@ -54,6 +123,26 @@ class Extract():
         return response.json()
     
     def _make_paginated_request( self, method: str, url_slug: str, **kwargs ) -> list[dict]:
+        """
+        Make a paginated request to the Whoop API.
+
+        Args:
+            method (str): The HTTP method to use for the request.
+            url_slug (str): The URL slug for the request.
+            **kwargs: Additional keyword arguments to pass to the request.
+
+        Returns:
+            list[dict]: The response data from the API.
+
+        Attributes:
+            access_token (str): The OAuth access token.
+            headers (dict): The request headers.
+            params (dict): The request parameters.
+            response_data (list[dict]): The response data from the API.
+
+        Raises:
+            requests.exceptions.HTTPError: If the request fails.
+        """
         # Get the OAuth token
         access_token = self._get_access_token()
 
@@ -80,6 +169,21 @@ class Extract():
         return response_data
     
     def main( self, api: str ):
+        """
+        Run the extract process.
+
+        Args:
+            api (str): The API to extract data from.
+
+        Returns:
+            dict: The extracted response.
+
+        Attributes:
+            self.whoop (WhoopAPI): The Whoop API object.
+
+        Raises:
+            None
+        """
         if self.wearable == "whoop":
             self.whoop = WhoopAPI();
             response = self._make_request( method="GET", url_slug= self.whoop( api ) );
