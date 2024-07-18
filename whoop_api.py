@@ -1,22 +1,27 @@
 """
+Created by Protim R. 2024
 """
 import requests;
 import config;
 
 
-class BaseAPI( object ):
-    """
-    Base class for any wearable API such as Whoop, Fitbit, etc.
-    """
-    def __init__( self ):
-        self.conf = config.get_config( "config.ini" );
-        self.url_dict = dict( self.conf.items( "urls" ) );
+### TOOD: Anticipating this class to be needed in the future when there are multiple APIs to extract data from.
 
-    def get_schema( self ):
-        raise NotImplementedError( "This method must be implemented in a derived class." );
+#class BaseAPI( object ):
+    #"""
+    #Base class for any wearable API such as Whoop, Fitbit, etc.
+    #"""
+    #def __init__( self ):
+        #self.conf = config.get_config( "config.ini" );
+        #self.url_dict = dict( self.conf.items( "urls" ) );
 
+    #def get_schema( self ):
+        #raise NotImplementedError( "This method must be implemented in a derived class." );
 
-class WhoopAPI( BaseAPI ):
+####
+ 
+
+class WhoopAPI():
     def __init__(self) -> None:
         super().__init__();
         self.schema = self._get_schema();

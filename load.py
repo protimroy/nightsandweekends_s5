@@ -1,3 +1,6 @@
+"""
+Created by Protim R. 2024
+"""
 import config as C;
 import pandas as pd;
 
@@ -12,7 +15,7 @@ class Load():
         None
 
     Attributes:
-    
+
         self.df (pd.DataFrame): The dataframe to load.
 
         self.check_table_exists (function): Check if a table exists.
