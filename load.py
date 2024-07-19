@@ -2,7 +2,6 @@
 Created by Protim R. 2024
 """
 import config as C;
-import pandas as pd;
 
 class Load():
     """
@@ -18,9 +17,9 @@ class Load():
 
         self.df (pd.DataFrame): The dataframe to load.
 
-        self.check_table_exists (function): Check if a table exists.
-        self.load_df (function): Load a dataframe to a table.
-        self.check_table_exists (function): Check if a table exists.
+        self._check_table_exists (function): Check if a table exists.
+        self._load_df (function): Load a dataframe to a table.
+        
 
     Raises:
         None
@@ -43,7 +42,7 @@ class Load():
         """
         super().__init__();
     
-    def check_table_exists( self, table_name: str ) -> bool:
+    def _check_table_exists( self, table_name: str ) -> bool:
         """
         Checks if a table exists in the database
 
@@ -68,7 +67,7 @@ class Load():
             except:
                 return False;
 
-    def load_df( self, df, table_name: str ):
+    def _load_df( self, df, table_name: str ):
         """
         Loads a df to sql table
 
@@ -88,7 +87,7 @@ class Load():
         self.df = df;
         engine = C.get_engine();
         with engine.connect() as conn:
-            if self.check_table_exists( table_name ):
+            if self._check_table_exists( table_name ):
                 try:
                     self.df.to_sql( table_name, conn, if_exists="append" );
                 except:

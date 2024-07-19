@@ -3,7 +3,6 @@ Created by Protim R. 2024
 """
 import requests;
 import config;
- 
 
 class WhoopAPI():
     def __init__(self) -> None:
@@ -115,7 +114,7 @@ class WhoopAPI():
             return self._get_profile();
     
         elif endpoint == 'cycle':
-            return self._get_cycle();
+            return self._get_cycle_collection();
     
         elif endpoint == 'recovery':
             return self._get_recovery();
@@ -186,6 +185,53 @@ class WhoopAPI():
         key = [ key for key in self.keys if "measurement" in key and "Id" not in key ][0];
         return key
     
+    def _get_cycle_collection( self ) -> dict[str]:
+        """
+        Make request to Get Cycle Collection endpoint.
+
+        Get all physiological cycles for a user. Results are sorted by start time in
+        descending order.
+
+        Args:
+
+
+        Returns:
+            list[dict[str]]: Response JSON data loaded into an object. Example:
+                [
+                    {
+                        "id": 93845,
+                        "user_id": 10129,
+                        "created_at": "2022-04-24T11:25:44.774Z",
+                        "updated_at": "2022-04-24T14:25:44.774Z",
+                        "start": "2022-04-24T02:25:44.774Z",
+                        "end": "2022-04-24T10:25:44.774Z",
+                        "timezone_offset": "-05:00",
+                        "score_state": "SCORED",
+                        "score": {
+                            "strain": 5.2951527,
+                            "kilojoule": 8288.297,
+                            "average_heart_rate": 68,
+                            "max_heart_rate": 141
+                        }
+                    },
+                    ...
+                ]
+        
+        Attributes:
+
+        Raises:
+            ValueError: If `start_date` is after `end_date
+        """
+        
+
+        #return self._make_paginated_request(
+            #method="GET",
+            #url_slug="v1/cycle",
+            #params={"start": start, "end": end, "limit": 25},
+        #)
+        key = [ key for key in self.keys if "cycle" in key and "Id" not in key ][0];
+        return key
+
     
 
 #if __name__ == "__main__":

@@ -5,7 +5,6 @@ import config
 import requests
 from OAuthSession import OAuthObject
 
-
 from whoop_api import WhoopAPI
 
 class Extract():
@@ -188,8 +187,20 @@ class Extract():
             None
         """
         if self.wearable == "whoop":
+
+            # set the start date to the start of the previous day. i.e 12:01 AM
+            # set the end date to the current day
+            # dont use now because it will include the current time
+        
+
+
             self.whoop = WhoopAPI();
-            response = self._make_request( method="GET", url_slug= self.whoop( api ) );
+            if api == 'cycle':
+                # make paginated request
+                start, end = self._format_dates( start_date, end_date );
+                response = self._make_paginated_request( method="GET", url_slug= self.whoop( api ), params={"start": start, "end": end, "limit": 25} );
+            else:
+                response = self._make_request( method="GET", url_slug= self.whoop( api ) );
             return response
 
 

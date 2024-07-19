@@ -81,7 +81,5 @@ class Transform():
         """
         # create a dataframe passing an index of 0
         self.df = pd.DataFrame( self.response, index=[0] );
-
         self._insert_date_column();
-
         return self.df;
